@@ -1,10 +1,13 @@
 package game;
 
+import actors.Zombie;
 import io.github.libsdl4j.api.event.SDL_Event;
 import io.github.libsdl4j.api.rect.SDL_Rect;
 import io.github.libsdl4j.api.render.SDL_Renderer;
 import io.github.libsdl4j.api.video.SDL_Window;
 import utils.RenderUtils;
+
+import java.util.ArrayList;
 
 import static io.github.libsdl4j.api.event.SDL_EventType.*;
 import static io.github.libsdl4j.api.event.SdlEvents.SDL_PollEvent;
@@ -12,7 +15,6 @@ import static io.github.libsdl4j.api.event.SdlEvents.SDL_PollEvent;
 import static io.github.libsdl4j.api.Sdl.SDL_Init;
 import static io.github.libsdl4j.api.SdlSubSystemConst.SDL_INIT_EVERYTHING;
 import static io.github.libsdl4j.api.error.SdlError.SDL_GetError;
-import static io.github.libsdl4j.api.keycode.SDL_Keycode.SDLK_SPACE;
 import static io.github.libsdl4j.api.render.SDL_RendererFlags.SDL_RENDERER_ACCELERATED;
 import static io.github.libsdl4j.api.render.SdlRender.*;
 import static io.github.libsdl4j.api.video.SDL_WindowFlags.SDL_WINDOW_RESIZABLE;
@@ -24,9 +26,11 @@ public class Game {
 
     public boolean isRunning = true;
     SDL_Window window;
-    SDL_Renderer renderer;
-    RenderUtils renderHelper;
-    ResourceManager resourceManager;
+    public SDL_Renderer renderer;
+    public RenderUtils renderHelper;
+    public ResourceManager resourceManager;
+    long timeStamp;
+    public ArrayList<Actor> actors;
 
     static final int ScreenWidth = 1024;
     static final int ScreenHeight = 768;
@@ -49,6 +53,11 @@ public class Game {
 
         this.renderHelper = new RenderUtils(renderer);
         this.resourceManager = new ResourceManager(this);
+
+        this.actors = new ArrayList<>();
+
+        Zombie z = new Zombie(this, 500,50);
+        this.timeStamp = System.nanoTime();
     }
 
     void renderBackGround() {
@@ -93,14 +102,32 @@ public class Game {
         }
     }
 
+    void update(double deltime) {
+        resourceManager.updateResources();
+
+        for(Actor ac: actors) {
+            ac.updateActor(deltime);
+        }
+    }
+
     void processOutput() {
         renderBackGround();
         resourceManager.RenderResources();
+
+        for(Actor ac: actors) {
+            ac.renderActor();
+        }
+
         SDL_RenderPresent(renderer);
     }
 
     public void gameLoop() {
+        long currentTime = System.nanoTime();
+        long deltime = currentTime - this.timeStamp;
+        this.timeStamp = currentTime;
+
         processInput();
+        update(deltime / 1_000_000_000.0);
         processOutput();
     }
 }

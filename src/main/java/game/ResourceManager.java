@@ -5,7 +5,9 @@ import io.github.libsdl4j.api.rect.SDL_Rect;
 
 import java.util.ArrayList;
 
+import static io.github.libsdl4j.api.event.SDL_EventType.SDL_KEYDOWN;
 import static io.github.libsdl4j.api.event.SDL_EventType.SDL_MOUSEBUTTONUP;
+import static io.github.libsdl4j.api.keycode.SDL_Keycode.SDLK_A;
 import static io.github.libsdl4j.api.render.SdlRender.SDL_RenderFillRect;
 
 public class ResourceManager {
@@ -13,6 +15,7 @@ public class ResourceManager {
     int playerMana;
     ArrayList<ManaPoint> manaPoints;
     Game g;
+    long startingEpoch;
 
 
     public ResourceManager(Game g) {
@@ -21,6 +24,7 @@ public class ResourceManager {
         this.g = g;
         this.playerMana = 100;
 
+        startingEpoch = System.nanoTime();
         manaPoints = new ArrayList<>();
 
         manaPoints.add(mp);
@@ -41,10 +45,18 @@ public class ResourceManager {
 
     }
 
+    public void updateResources() {
+        ArrayList<ManaPoint> remainingMana = new ArrayList<>();
+        for(ManaPoint mp: manaPoints) {
+            if(!mp.collected) {
+                remainingMana.add(mp);
+            }
+        }
+        manaPoints = remainingMana;
+    }
+
     public void handleResourceInput(SDL_Event ev) {
         if (ev.type == SDL_MOUSEBUTTONUP) {
-            System.out.println(ev.button.x);
-            System.out.println(ev.button.y);
 
             int mx = ev.button.x;
             int my = ev.button.y;
@@ -57,8 +69,13 @@ public class ResourceManager {
                 int ydown = mp.py + ManaPoint.Height / 2;
 
                 if (mx >= xleft && mx <= xright && my >= yup && my <= ydown) {
-                    System.out.println("Mana clicked");
+                    playerMana += mp.points;
+                    mp.setCollected();
                 }
+            }
+        } else if(ev.type == SDL_KEYDOWN) {
+            if(ev.key.keysym.sym == SDLK_A) {
+                System.out.println(playerMana);
             }
         }
     }
