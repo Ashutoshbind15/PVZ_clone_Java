@@ -8,9 +8,15 @@ import static io.github.libsdl4j.api.render.SdlRender.SDL_RenderFillRect;
 
 public class Zombie extends Actor {
 
+    public int health;
+
     @Override
     public  void updateActor(double deltime) {
         this.px += (float) (this.direction * deltime * this.speed);
+
+        if(this.health <= 0) {
+            this.game.deadActors.add(this);
+        }
     }
 
     @Override
@@ -25,6 +31,8 @@ public class Zombie extends Actor {
         this.height = 30;
         this.direction = -1;
         this.width = 20;
+        this.health = 100;
+        this.type = "Zombie";
     }
 
     public Zombie(Game g, int x, int y) {
@@ -33,5 +41,7 @@ public class Zombie extends Actor {
         this.height = 30;
         this.direction = -1;
         this.width = 20;
+        this.health = 100;
+        this.type = "Zombie";
     }
 }

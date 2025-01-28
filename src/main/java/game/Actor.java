@@ -9,11 +9,11 @@ public abstract class Actor {
     public Game game;
     public int width;
     public int height;
+    public String type;
 
     public Actor(Game g) {
 //        add actor to the game
           this.game = g;
-          this.game.actors.add(this);
     }
 
     public Actor(Game g, int x, int y) {

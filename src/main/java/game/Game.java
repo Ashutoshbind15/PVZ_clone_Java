@@ -1,10 +1,12 @@
 package game;
 
+import actors.Plant;
 import actors.Zombie;
 import io.github.libsdl4j.api.event.SDL_Event;
 import io.github.libsdl4j.api.rect.SDL_Rect;
 import io.github.libsdl4j.api.render.SDL_Renderer;
 import io.github.libsdl4j.api.video.SDL_Window;
+import utils.GameGrid;
 import utils.RenderUtils;
 
 import java.util.ArrayList;
@@ -29,8 +31,11 @@ public class Game {
     public SDL_Renderer renderer;
     public RenderUtils renderHelper;
     public ResourceManager resourceManager;
-    long timeStamp;
+    public long timeStamp;
     public ArrayList<Actor> actors;
+    public ArrayList<Actor> pendingActors;
+    public ArrayList<Actor> deadActors;
+    public GameGrid gameGrid;
 
     static final int ScreenWidth = 1024;
     static final int ScreenHeight = 768;
@@ -53,10 +58,15 @@ public class Game {
 
         this.renderHelper = new RenderUtils(renderer);
         this.resourceManager = new ResourceManager(this);
-
+        this.gameGrid = new GameGrid(ScreenWidth, ScreenHeight, 5, 10);
         this.actors = new ArrayList<>();
+        this.pendingActors = new ArrayList<>();
+        this.deadActors = new ArrayList<>();
 
-        Zombie z = new Zombie(this, 500,50);
+        Zombie z = new Zombie(this, 500,100);
+        this.actors.add(z);
+        Plant p = new Plant(this, 20, 100);
+        this.actors.add(p);
         this.timeStamp = System.nanoTime();
     }
 
@@ -66,22 +76,19 @@ public class Game {
 
         renderHelper.setRendererColor(128,128,128,255);
 
-        SDL_Rect r = renderHelper.drawRectangle( (int)(0.8 * ScreenWidth), 0,  (int)(0.2  * ScreenWidth), ScreenHeight);
+        SDL_Rect r = renderHelper.drawRectangle( ScreenWidth, 0,  (int)(0.2  * ScreenWidth), ScreenHeight);
         SDL_RenderFillRect(renderer, r);
-
-        int xleft = (int) (0.8 * ScreenWidth);
-        int pixelsPerBlock = (int)(xleft / 10);
-        int yPixelsPerBlock = (int)(ScreenHeight / 5);
 
         renderHelper.setRendererColor(0,250,20);
 
         for(int i = 0; i < 5; i++) {
             for(int j = 0;j < 10;j ++) {
                 if ( (i+j)%2 == 0) {
-                    int uleftx = j * (int)(pixelsPerBlock);
-                    int ulefty = i * yPixelsPerBlock;
+                    int[] position = gameGrid.getBlock(i,j);
+                    int blockWidth = gameGrid.getBlockWidth();
+                    int blockHeight = gameGrid.getBlockHeight();
 
-                    SDL_Rect darkTileRect = renderHelper.drawRectangle(uleftx, ulefty, pixelsPerBlock, yPixelsPerBlock);
+                    SDL_Rect darkTileRect = renderHelper.drawRectangle(position[0] - blockWidth / 2, position[1] - blockHeight / 2, blockWidth, blockHeight);
                     SDL_RenderFillRect(renderer, darkTileRect);
                 }
             }
@@ -108,6 +115,18 @@ public class Game {
         for(Actor ac: actors) {
             ac.updateActor(deltime);
         }
+
+        actors.addAll(pendingActors);
+        pendingActors.clear();
+
+        for(Actor ac: deadActors) {
+            if(actors.remove(ac)) {
+                System.out.println(ac.type);
+                System.out.println("Dead actor found");
+            }
+        }
+
+        deadActors.clear();
     }
 
     void processOutput() {
