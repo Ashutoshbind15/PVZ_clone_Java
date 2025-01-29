@@ -65,7 +65,7 @@ public class Game {
 
         Zombie z = new Zombie(this, 500,100);
         this.actors.add(z);
-        Plant p = new Plant(this, 20, 100);
+        Plant p = new Plant(this, 20, 100, "BeanShooter", 100);
         this.actors.add(p);
         this.timeStamp = System.nanoTime();
     }
@@ -110,7 +110,7 @@ public class Game {
     }
 
     void update(double deltime) {
-        resourceManager.updateResources();
+        resourceManager.updateResources(deltime);
 
         for(Actor ac: actors) {
             ac.updateActor(deltime);
@@ -120,10 +120,7 @@ public class Game {
         pendingActors.clear();
 
         for(Actor ac: deadActors) {
-            if(actors.remove(ac)) {
-                System.out.println(ac.type);
-                System.out.println("Dead actor found");
-            }
+            actors.remove(ac);
         }
 
         deadActors.clear();

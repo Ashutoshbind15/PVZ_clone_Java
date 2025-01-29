@@ -15,8 +15,6 @@ public class ManaPoint {
 
     public ManaPoint(Integer px, Integer py) {
         LocalDateTime now = LocalDateTime.now();
-        System.out.println("The postional coordinates of the mana is equal to : " +  px.toString() + ": " + py.toString());
-        System.out.println(now);
 
         this.points = 100;
         this.px = px;

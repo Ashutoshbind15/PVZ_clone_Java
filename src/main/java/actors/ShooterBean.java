@@ -35,8 +35,6 @@ public class ShooterBean extends Actor {
             if(Objects.equals(ac.type, "Zombie")) {
                 if(CollisionDetection.detectCollision(this, ac)) {
 
-                    System.out.println("COLLISION");
-
                     Zombie zombie = (Zombie) ac;
                     zombie.health -= 50;
 

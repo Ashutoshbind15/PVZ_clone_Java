@@ -37,4 +37,8 @@ public class GameGrid {
     public int getBlockHeight() {
         return blockHeight;
     }
+
+    public int getGridRows() {
+        return  gridRows;
+    }
 }
