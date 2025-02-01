@@ -2,15 +2,19 @@ package game;
 
 import java.time.LocalDateTime;
 
+// TODO: Let the manapoint fall from the sky
+
 public class ManaPoint {
     Integer px;
     Integer py;
     static Integer Width = 50;
     static Integer Height = 50;
     Integer points;
+
     int appearanceTimeStamp;
     int placingTimeInSeconds;
     int deletionTimeInSeconds;
+
     boolean collected;
 
     public ManaPoint(Integer px, Integer py) {

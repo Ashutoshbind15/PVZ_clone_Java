@@ -1,7 +1,6 @@
 package game;
 
 import actors.Plant;
-import actors.ShooterBean;
 import actors.Zombie;
 import io.github.libsdl4j.api.event.SDL_Event;
 import io.github.libsdl4j.api.rect.SDL_Rect;
@@ -30,17 +29,13 @@ public class ResourceManager {
     Plant selectedPlant;
 
     void fillPlantOptions() {
-        Plant bs = new Plant(g, g.ScreenWidth, 20, "BeanShooter", 100);
-        Plant thrower = new Plant(g, g.ScreenWidth, 20, "BallThrower", 200);
-
-        bs.speed = 30;
-        bs.direction = -1;
-
-        thrower.speed = 30;
-        thrower.direction = -1;
+        Plant bs = new Plant(g, Plant.PlantType.BEANSHOOTER, true);
+        Plant thrower = new Plant(g, Plant.PlantType.BALLTHROWER, true);
+        Plant sunflower = new Plant(g, Plant.PlantType.SUNFLOWER, true);
 
         plantOptions.add(bs);
         plantOptions.add(thrower);
+        plantOptions.add(sunflower);
     }
 
     void runAfterInterval(int seconds) {
@@ -62,7 +57,6 @@ public class ResourceManager {
 
         plantOptions = new ArrayList<>();
         plantQueue = new ArrayList<>();
-
 
         this.g = g;
         this.playerMana = 100;
@@ -97,8 +91,6 @@ public class ResourceManager {
         int randomInt = (int) v;
 
         Plant randomPlant = plantOptions.get(randomInt);
-        System.out.println(randomPlant.height);
-        System.out.println(randomPlant.game);
         plantQueue.add(new Plant(randomPlant));
 
         int randomLane = (int) (Math.random() * this.g.gameGrid.getGridRows());
@@ -119,6 +111,14 @@ public class ResourceManager {
 
         for(Plant p : plantQueue) {
             p.px += (float) (p.direction * p.speed * deltime);
+
+
+//            Add in the queue coming in and filling logic in here
+//            if(p.px < 10) {
+//                p.px = 10;
+//            }
+//
+//            if(CollisionDetection.detectCollision())
         }
 
         runAfterInterval(5);
@@ -171,8 +171,6 @@ public class ResourceManager {
                     plantToBePlanted.speed = 0;
                     plantToBePlanted.px = mx;
                     plantToBePlanted.py = my;
-                    System.out.println(selectedPlant.height);
-                    System.out.println(selectedPlant.game);
                     this.g.pendingActors.add(plantToBePlanted);
                 }
 

@@ -11,14 +11,6 @@ import static io.github.libsdl4j.api.render.SdlRender.SDL_RenderFillRect;
 
 public class ShooterBean extends Actor {
 
-    public ShooterBean(Game g) {
-        super(g);
-        this.direction = +1;
-        this.speed = 50;
-        this.width = 20;
-        this.height = 10;
-    }
-
     public ShooterBean(Game g, int x, int y) {
         super(g, x, y);
         this.direction = +1;

@@ -1,16 +1,12 @@
 package utils;
 
 public class GameGrid {
-    private final int windowWidth;
-    private final int windowHeight;
     private final int gridRows;    // Number of rows
     private final int gridCols;    // Number of columns
     private final int blockWidth;  // Width of each block
     private final int blockHeight; // Height of each block
 
     public GameGrid(int windowWidth, int windowHeight, int gridRows, int gridCols) {
-        this.windowWidth = windowWidth;
-        this.windowHeight = windowHeight;
         this.gridRows = gridRows;
         this.gridCols = gridCols;
         this.blockWidth = windowWidth / gridCols;  // Width of each column

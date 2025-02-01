@@ -25,16 +25,6 @@ public class Zombie extends Actor {
         SDL_RenderFillRect(this.game.renderer, zombieRekt);
     }
 
-    public Zombie(Game g) {
-        super(g);
-        this.speed = 30;
-        this.height = 30;
-        this.direction = -1;
-        this.width = 20;
-        this.health = 100;
-        this.type = "Zombie";
-    }
-
     public Zombie(Game g, int x, int y) {
         super(g,x,y);
         this.speed = 30;

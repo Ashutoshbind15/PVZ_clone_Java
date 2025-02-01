@@ -16,6 +16,9 @@ public abstract class Actor {
           this.game = g;
     }
 
+//  Don't think we need a big constructor, we are bubbling down the factory to the children (the task of creating objects is given to the children
+//  constructors with defaults and enums for now, and later maybe loading from a db or from a json/yml file for the  configuration
+
     public Actor(Game g, int x, int y) {
         this(g);
         setPosition(x,y);

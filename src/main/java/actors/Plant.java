@@ -6,7 +6,15 @@ import io.github.libsdl4j.api.rect.SDL_Rect;
 
 import static io.github.libsdl4j.api.render.SdlRender.SDL_RenderFillRect;
 
+// TODO: Let the shooters be as components to the plant objects, so that we can have custom trajectories, speeds, and damages, possible powerups to the shooters/ plants....
+
 public class Plant extends Actor {
+
+    public enum PlantType {
+        SUNFLOWER,
+        BEANSHOOTER,
+        BALLTHROWER
+    }
 
     long plantTime;
     boolean isInCycle;
@@ -15,6 +23,9 @@ public class Plant extends Actor {
     String state;
     int cost;
     String name;
+
+    static int PlantHeight = 20;
+    static int PlantWidth = 30;
 
     void runAfterInterval(int seconds) {
         int secondsPassedSincePlanted = (int)( (this.game.timeStamp - plantTime) / 1_000_000_000.0);
@@ -39,17 +50,6 @@ public class Plant extends Actor {
         SDL_RenderFillRect(this.game.renderer, plantRect);
     }
 
-    public Plant(Game g, int px, int py, String name, int cost) {
-        super(g, px, py);
-        this.width = 30;
-        this.height = 20;
-        this.plantTime = System.nanoTime();
-        this.type = "Plant";
-        this.state = "Chosen";
-        this.name = name;
-        this.cost = cost;
-    }
-
     public Plant(Plant other) {
         super(other.game, (int) other.px, (int) other.py);
         this.height = other.height;
@@ -58,8 +58,42 @@ public class Plant extends Actor {
         this.state = other.state;
         this.name = other.name;
         this.cost = other.cost;
-
         this.speed = other.speed;
         this.direction = other.direction;
+
+        this.plantTime = System.nanoTime();
+        this.isInCycle = false;
+    }
+
+    public Plant(Game g, PlantType type, boolean isInQueue) {
+
+        super(g);
+
+        this.width = PlantWidth;
+        this.height = PlantHeight;
+        this.plantTime = System.nanoTime();
+        this.type = "Plant";
+        this.state = "Chosen";
+
+        if(isInQueue) {
+            this.speed = 30;
+            this.direction = -1;
+        }
+
+        this.name = type.name();
+
+        switch (type) {
+            case BALLTHROWER -> {
+                this.cost = 150;
+            }
+
+            case BEANSHOOTER -> {
+                this.cost = 100;
+            }
+
+            case SUNFLOWER -> {
+                this.cost = 100;
+            }
+        }
     }
 }

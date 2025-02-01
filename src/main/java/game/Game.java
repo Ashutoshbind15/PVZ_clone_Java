@@ -29,13 +29,15 @@ public class Game {
     public boolean isRunning = true;
     SDL_Window window;
     public SDL_Renderer renderer;
+    public long timeStamp;
+
     public RenderUtils renderHelper;
     public ResourceManager resourceManager;
-    public long timeStamp;
+    public GameGrid gameGrid;
+
     public ArrayList<Actor> actors;
     public ArrayList<Actor> pendingActors;
     public ArrayList<Actor> deadActors;
-    public GameGrid gameGrid;
 
     static final int ScreenWidth = 1024;
     static final int ScreenHeight = 768;
@@ -59,15 +61,21 @@ public class Game {
         this.renderHelper = new RenderUtils(renderer);
         this.resourceManager = new ResourceManager(this);
         this.gameGrid = new GameGrid(ScreenWidth, ScreenHeight, 5, 10);
+
         this.actors = new ArrayList<>();
         this.pendingActors = new ArrayList<>();
         this.deadActors = new ArrayList<>();
 
+        loadInitialGameScene();
+    }
+
+    private void loadInitialGameScene() {
         Zombie z = new Zombie(this, 500,100);
         this.actors.add(z);
-        Plant p = new Plant(this, 20, 100, "BeanShooter", 100);
+        Plant p = new Plant(this, Plant.PlantType.BEANSHOOTER, false);
         this.actors.add(p);
         this.timeStamp = System.nanoTime();
+
     }
 
     void renderBackGround() {
