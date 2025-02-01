@@ -65,9 +65,9 @@ public class Plant extends Actor {
         this.isInCycle = false;
     }
 
-    public Plant(Game g, PlantType type, boolean isInQueue) {
+    public Plant(Game g,  int px, int py, PlantType type, boolean isInQueue) {
 
-        super(g);
+        super(g, px, py);
 
         this.width = PlantWidth;
         this.height = PlantHeight;

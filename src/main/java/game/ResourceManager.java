@@ -29,9 +29,9 @@ public class ResourceManager {
     Plant selectedPlant;
 
     void fillPlantOptions() {
-        Plant bs = new Plant(g, Plant.PlantType.BEANSHOOTER, true);
-        Plant thrower = new Plant(g, Plant.PlantType.BALLTHROWER, true);
-        Plant sunflower = new Plant(g, Plant.PlantType.SUNFLOWER, true);
+        Plant bs = new Plant(g, g.ScreenWidth, 20, Plant.PlantType.BEANSHOOTER, true);
+        Plant thrower = new Plant(g, g.ScreenWidth, 20, Plant.PlantType.BALLTHROWER, true);
+        Plant sunflower = new Plant(g, g.ScreenWidth, 20, Plant.PlantType.SUNFLOWER, true);
 
         plantOptions.add(bs);
         plantOptions.add(thrower);

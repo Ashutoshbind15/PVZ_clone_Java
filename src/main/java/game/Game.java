@@ -72,10 +72,9 @@ public class Game {
     private void loadInitialGameScene() {
         Zombie z = new Zombie(this, 500,100);
         this.actors.add(z);
-        Plant p = new Plant(this, Plant.PlantType.BEANSHOOTER, false);
+        Plant p = new Plant(this, 100, 100, Plant.PlantType.BEANSHOOTER, false);
         this.actors.add(p);
         this.timeStamp = System.nanoTime();
-
     }
 
     void renderBackGround() {
