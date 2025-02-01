@@ -24,8 +24,8 @@ public class Plant extends Actor {
     int cost;
     String name;
 
-    static int PlantHeight = 20;
-    static int PlantWidth = 30;
+    static int PlantHeight = 50;
+    static int PlantWidth = 50;
 
     void runAfterInterval(int seconds) {
         int secondsPassedSincePlanted = (int)( (this.game.timeStamp - plantTime) / 1_000_000_000.0);
@@ -46,8 +46,7 @@ public class Plant extends Actor {
 
     @Override
     public void renderActor() {
-        SDL_Rect plantRect = this.game.renderHelper.drawRectangle( (int)(this.px - this.width / 2), (int) (this.py - this.height / 2), this.width, this.height);
-        SDL_RenderFillRect(this.game.renderer, plantRect);
+        this.game.renderHelper.renderTexture("plant", this);
     }
 
     public Plant(Plant other) {

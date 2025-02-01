@@ -75,6 +75,8 @@ public class Game {
         Plant p = new Plant(this, 100, 100, Plant.PlantType.BEANSHOOTER, false);
         this.actors.add(p);
         this.timeStamp = System.nanoTime();
+
+        renderHelper.loadImage("plant");
     }
 
     void renderBackGround() {
